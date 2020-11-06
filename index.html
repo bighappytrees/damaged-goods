@@ -1,0 +1,43 @@
+<head>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+
+  <script src="//unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="//unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script src="//unpkg.com/babel-standalone"></script>
+
+  <script src="//unpkg.com/three"></script>
+  <script src="//unpkg.com/three-spritetext"></script>
+
+  <script src="//unpkg.com/react-force-graph-3d"></script>
+  <!--<script src="../../src/packages/react-force-graph-3d/dist/react-force-graph-3d.js"></script>-->
+</head>
+
+<body>
+  <div id="graph"></div>
+
+  <script type="text/jsx">
+    fetch('./miserables.json').then(res => res.json()).then(data => {
+      ReactDOM.render(
+        <ForceGraph3D
+        backgroundColor="black"
+        linkColor="white"
+          graphData={data}
+          nodeAutoColorBy="group"
+          nodeThreeObject={node => {
+
+            const imgTexture = new THREE.TextureLoader().load(`./${node.name}`);
+            const material = new THREE.SpriteMaterial({ map: imgTexture });
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(12, 12);
+            return sprite;
+          }}
+        />,
+        document.getElementById('graph')
+      );
+    });
+  </script>
+</body>
